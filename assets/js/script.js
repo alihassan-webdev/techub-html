@@ -770,6 +770,54 @@ class ContactForm {
 }
 
 // ==============================================
+// NUMBER COUNTER ANIMATIONS
+// ==============================================
+
+class CounterAnimator {
+    constructor() {
+        this.counters = Array.from(document.querySelectorAll('.stat-value[data-count]'));
+        this.observer = null;
+        this.animated = new WeakSet();
+        if (this.counters.length) {
+            this.init();
+        }
+    }
+    init() {
+        if ('IntersectionObserver' in window) {
+            this.observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        this.animate(entry.target);
+                        this.observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+            this.counters.forEach(el => this.observer.observe(el));
+        } else {
+            // Fallback: animate immediately
+            this.counters.forEach(el => this.animate(el));
+        }
+    }
+    animate(el) {
+        if (this.animated.has(el)) return;
+        this.animated.add(el);
+        const target = parseFloat(el.getAttribute('data-count')) || 0;
+        const suffix = el.getAttribute('data-suffix') || '';
+        const duration = 1200;
+        const start = performance.now();
+        const startVal = 0;
+        const step = (now) => {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = Math.floor(startVal + (target - startVal) * eased);
+            el.textContent = `${current}${suffix}`;
+            if (progress < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+    }
+}
+
+// ==============================================
 // SCROLL ANIMATIONS
 // ==============================================
 
