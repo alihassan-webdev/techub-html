@@ -1390,14 +1390,14 @@ a:hover {
 
 .faq-item.open .faq-content {
     max-height: 20rem;
-    padding: 0 var(--space-6) var(--space-6);
+    padding: 0 var(--space-6) var(--space-4);
 }
 
 .faq-content p {
     color: var(--color-text-secondary);
     font-size: 0.95rem;
     line-height: 1.5;
-    margin: 0;
+    margin: var(--space-2) 0 0 0;
 }
 
 .help-section {
@@ -1500,7 +1500,7 @@ a:hover {
 }
 
 .footer-links a:hover {
-    color: var(--color-primary-light);
+    color: var(--color-white);
 }
 
 .footer-links a svg {
@@ -1644,7 +1644,7 @@ a:hover {
 }
 
 .credits a:hover {
-    color: var(--color-primary-light);
+    color: var(--color-white);
 }
 
 /* Course Styles */
