@@ -2395,6 +2395,11 @@ body.page-leave { animation: pageFadeOut 140ms ease-out forwards; }
     to { opacity: 1; transform: scale(1); }
 }
 
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
 /* Animation Classes */
 .animate-fade-in {
     animation: fadeIn 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
