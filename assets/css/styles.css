@@ -31,7 +31,7 @@
     --color-secondary: #B22429;
     --color-green: #16a34a;
     --color-blue: var(--color-primary);
-    --color-red: #dc2626;
+    --color-red: var(--color-secondary);
     
     /* Background and Surface Colors */
     --color-background: #ffffff;
@@ -590,7 +590,7 @@ a:hover {
 }
 
 .btn-secondary:hover {
-    background-color: #dc2626;
+    background-color: var(--color-secondary);
     transform: translateY(-2px);
     box-shadow: 0 10px 25px -5px rgba(178, 36, 41, 0.25);
     color: white;
@@ -1814,7 +1814,7 @@ a:hover {
 }
 
 .course-btn.premium:hover {
-    background-color: #dc2626;
+    background-color: var(--color-secondary);
 }
 
 /* Contact Styles */
