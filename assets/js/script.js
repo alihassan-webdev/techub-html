@@ -215,15 +215,15 @@ class HeaderManager {
     
     handleMobileNavClick(e, link) {
         const href = link.getAttribute('href');
-        
+
         this.closeMobileMenu();
-        
-        // Add a small delay for smooth transition
+
+        // Navigate quickly after closing menu
         setTimeout(() => {
-            if (href !== window.location.pathname) {
+            if (href && href !== window.location.pathname) {
                 window.location.href = href;
             }
-        }, 300);
+        }, 80);
     }
 }
 
@@ -865,13 +865,16 @@ class PerformanceOptimizer {
     
     optimizeImages() {
         const images = document.querySelectorAll('img');
-        
+
         images.forEach(img => {
-            // Add loading attribute for native lazy loading
-            if (!img.hasAttribute('loading')) {
+            // Avoid lazy-loading above-the-fold or critical images
+            const inHero = !!img.closest('.hero, .page-header, header');
+            const rect = img.getBoundingClientRect();
+            const likelyAboveFold = rect.top < (window.innerHeight || 800);
+            if (!img.hasAttribute('loading') && !inHero && !likelyAboveFold) {
                 img.setAttribute('loading', 'lazy');
             }
-            
+
             // Add error handling
             img.addEventListener('error', () => {
                 img.src = 'assets/images/placeholder.svg';
@@ -1056,12 +1059,8 @@ class TechHubApp {
     }
 
     setupPageTransitions() {
-        // Fade-in on load (no delayed navigation to avoid blank flashes)
-        document.body.classList.add('page-enter');
-        // Optional: add a quick fade when unloading without delaying navigation
-        window.addEventListener('beforeunload', () => {
-            document.body.classList.add('page-leave');
-        });
+        // Disable page-level fades to prevent blank flashes between pages
+        // Per-section animations remain via IntersectionObserver
     }
     
     pauseAnimations() {
