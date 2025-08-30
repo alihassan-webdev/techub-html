@@ -1056,24 +1056,11 @@ class TechHubApp {
     }
 
     setupPageTransitions() {
-        // Fade-in on load
+        // Fade-in on load (no delayed navigation to avoid blank flashes)
         document.body.classList.add('page-enter');
-
-        // Intercept internal link clicks for fade-out
-        const anchors = Array.from(document.querySelectorAll('a[href]'));
-        anchors.forEach(a => {
-            const href = a.getAttribute('href');
-            const target = a.getAttribute('target');
-            if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || target === '_blank') return;
-            const isInternal = href.endsWith('.html') || href.endsWith('.php') || href.startsWith('/') || (!href.startsWith('http'));
-            if (!isInternal) return;
-            a.addEventListener('click', (e) => {
-                // Allow modified clicks (cmd/ctrl)
-                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-                e.preventDefault();
-                document.body.classList.add('page-leave');
-                setTimeout(() => { window.location.href = href; }, 180);
-            });
+        // Optional: add a quick fade when unloading without delaying navigation
+        window.addEventListener('beforeunload', () => {
+            document.body.classList.add('page-leave');
         });
     }
     
