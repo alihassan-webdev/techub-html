@@ -796,11 +796,11 @@ a:hover {
 
 /* Hero Section */
 .hero {
-    min-height: 100vh;
+    min-height: 90vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--space-6) 0 var(--space-12);
+    padding: var(--space-4) 0 var(--space-10);
     background-color: var(--color-white);
     position: relative;
     overflow: hidden;
@@ -926,7 +926,8 @@ a:hover {
 .hero-carousel {
     display: flex;
     justify-content: center;
-    order: -1;
+    order: 2;
+    margin-top: var(--space-6);
 }
 
 @media (min-width: 1024px) {
