@@ -913,6 +913,8 @@ a:hover {
 .hero-buttons .btn-primary,
 .hero-buttons .btn-secondary {
     width: 100%;
+    justify-content: center;
+    text-align: center;
 }
 
 @media (min-width: 640px) {
