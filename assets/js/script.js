@@ -782,6 +782,7 @@ class ScrollAnimations {
         this.addDefaultAnimationClasses();
         this.animatedElements = document.querySelectorAll('.animate-fade-in, .animate-slide-up, .animate-scale-in');
         this.init();
+        this.applyStagger();
     }
 
     addDefaultAnimationClasses() {
@@ -844,6 +845,26 @@ class ScrollAnimations {
         // Fallback: animate all elements immediately
         this.animatedElements.forEach(element => {
             this.animateElement(element);
+        });
+    }
+
+    applyStagger() {
+        const containers = [
+            '.cards-grid-2',
+            '.cards-grid-3',
+            '.stats-grid',
+            '.faq-grid',
+            '.courses-grid',
+            '.footer-content'
+        ];
+        containers.forEach(sel => {
+            document.querySelectorAll(sel).forEach(container => {
+                const children = Array.from(container.children);
+                children.forEach((child, i) => {
+                    child.style.willChange = 'transform, opacity';
+                    child.style.animationDelay = `${Math.min(i * 60, 360)}ms`;
+                });
+            });
         });
     }
 }
@@ -1019,9 +1040,16 @@ class TechHubApp {
     }
     
     initializeLucideIcons() {
-        // Initialize Lucide icons if the library is loaded
-        if (typeof lucide !== 'undefined' && lucide.createIcons) {
-            lucide.createIcons();
+        // Initialize Lucide icons if the library is loaded, defer to idle time
+        const init = () => {
+            if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                lucide.createIcons();
+            }
+        };
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(init, { timeout: 800 });
+        } else {
+            setTimeout(init, 0);
         }
     }
     
@@ -1043,7 +1071,7 @@ class TechHubApp {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => {
                 this.handleResize();
-            }, 250);
+            }, 150);
         });
         
         // Handle back button navigation
@@ -1054,8 +1082,30 @@ class TechHubApp {
             }
         });
 
-        // Setup page transitions
+        // Setup page transitions (disabled to avoid flashes)
         this.setupPageTransitions();
+        // Enhance navigation with prefetch for faster switches
+        this.enhanceNavigation();
+    }
+
+    enhanceNavigation() {
+        // Prefetch internal .html links on hover/touchstart
+        const anchors = Array.from(document.querySelectorAll('a[href$=".html"]'));
+        const prefetched = new Set();
+        const prefetch = (url) => {
+            if (!url || prefetched.has(url)) return;
+            const link = document.createElement('link');
+            link.rel = 'prefetch';
+            link.href = url;
+            document.head.appendChild(link);
+            prefetched.add(url);
+        };
+        anchors.forEach(a => {
+            const href = a.getAttribute('href');
+            if (!href || href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+            a.addEventListener('mouseenter', () => prefetch(href));
+            a.addEventListener('touchstart', () => prefetch(href), { passive: true });
+        });
     }
 
     setupPageTransitions() {
