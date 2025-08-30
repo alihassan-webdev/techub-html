@@ -901,6 +901,7 @@ a:hover {
     .hero-buttons {
         flex-direction: row;
         gap: var(--space-4);
+        justify-content: center;
     }
 }
 
