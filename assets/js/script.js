@@ -776,8 +776,8 @@ class ContactForm {
 class ScrollAnimations {
     constructor() {
         this.observerOptions = {
-            threshold: 0.1,
-            rootMargin: '50px 0px -50px 0px'
+            threshold: 0.06,
+            rootMargin: '120px 0px -60px 0px'
         };
         this.addDefaultAnimationClasses();
         this.animatedElements = document.querySelectorAll('.animate-fade-in, .animate-slide-up, .animate-scale-in');
@@ -786,11 +786,11 @@ class ScrollAnimations {
 
     addDefaultAnimationClasses() {
         const mappings = [
-            ['.hero-text', 'animate-slide-up'],
+            ['.hero-text, .page-title, .page-description', 'animate-slide-up'],
             ['.hero-carousel', 'animate-scale-in'],
-            ['.section-header', 'animate-fade-in'],
-            ['.stat-card, .partner-card, .review-card, .faq-item, .course-card, .card', 'animate-slide-up'],
-            ['.help-section', 'animate-scale-in']
+            ['.section-header, header .container', 'animate-fade-in'],
+            ['.stat-card, .partner-card, .review-card, .faq-item, .course-card, .card, .footer-section, .contact-grid > *', 'animate-slide-up'],
+            ['.help-section, .newsletter, .location-header', 'animate-scale-in']
         ];
         mappings.forEach(([selector, cls]) => {
             document.querySelectorAll(selector).forEach(el => el.classList.add(cls));
