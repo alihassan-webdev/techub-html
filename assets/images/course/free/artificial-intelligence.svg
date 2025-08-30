@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1067" viewBox="0 0 1600 1067">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1220"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="gridGlow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#16a34a" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#16a34a" stop-opacity="0.0"/>
+    </linearGradient>
+    <radialGradient id="accentA" cx="25%" cy="35%" r="55%">
+      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="accentB" cx="75%" cy="70%" r="50%">
+      <stop offset="0%" stop-color="#84cc16" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#84cc16" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="10"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="url(#bg)"/>
+  <rect width="100%" height="100%" fill="url(#accentA)"/>
+  <rect width="100%" height="100%" fill="url(#accentB)"/>
+
+  <!-- Perspective grid -->
+  <g opacity="0.22">
+    <path d="M0,820 L1600,820" stroke="url(#gridGlow)"/>
+    <path d="M0,880 L1600,880" stroke="url(#gridGlow)"/>
+    <path d="M0,940 L1600,940" stroke="url(#gridGlow)"/>
+    <path d="M200,1067 L800,740 L1400,1067" stroke="#16a34a" stroke-opacity="0.25" fill="none"/>
+    <path d="M0,1067 L650,740 L1600,1067" stroke="#16a34a" stroke-opacity="0.15" fill="none"/>
+  </g>
+
+  <!-- Circuit nodes & links -->
+  <g fill="none" stroke="#22c55e" stroke-opacity="0.7">
+    <circle cx="320" cy="360" r="6"/>
+    <circle cx="460" cy="300" r="6"/>
+    <circle cx="620" cy="360" r="6"/>
+    <circle cx="880" cy="300" r="6"/>
+    <circle cx="1060" cy="380" r="6"/>
+    <circle cx="1240" cy="320" r="6"/>
+    <path d="M320,360 L460,300 L620,360 L880,300 L1060,380 L1240,320" stroke-width="2"/>
+  </g>
+
+  <!-- Framed module blocks -->
+  <g stroke="#94a3b8" stroke-opacity="0.85" fill="none">
+    <rect x="260" y="200" width="200" height="120" rx="12"/>
+    <rect x="520" y="230" width="220" height="140" rx="12"/>
+    <rect x="1000" y="220" width="260" height="140" rx="14"/>
+  </g>
+
+  <!-- Floating neural arcs -->
+  <g stroke="#16a34a" stroke-opacity="0.7" fill="none" filter="url(#softGlow)">
+    <path d="M220,520 C420,420 780,420 980,520"/>
+    <path d="M340,560 C520,480 720,480 1180,560"/>
+  </g>
+
+  <!-- Title -->
+  <g>
+    <text x="6.5%" y="92%" fill="#e2e8f0" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="44" font-weight="800" letter-spacing="0.5">Artificial Intelligence</text>
+    <text x="6.5%" y="96.5%" fill="#86efac" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="18" font-weight="600" opacity="0.9">Abstract • Tech • Green + Zinc Accents</text>
+  </g>
+</svg>
