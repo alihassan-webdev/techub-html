@@ -2382,8 +2382,8 @@ a:hover {
 /* Page transition animations */
 @keyframes pageFadeIn { from { opacity: 0 } to { opacity: 1 } }
 @keyframes pageFadeOut { from { opacity: 1 } to { opacity: 0 } }
-body.page-enter { animation: pageFadeIn 320ms ease forwards; }
-body.page-leave { animation: pageFadeOut 200ms ease forwards; }
+body.page-enter { animation: pageFadeIn 260ms ease-out forwards; }
+body.page-leave { animation: pageFadeOut 140ms ease-out forwards; }
 
 @keyframes scaleIn {
     from { opacity: 0; transform: scale(0.95); }
@@ -2392,15 +2392,24 @@ body.page-leave { animation: pageFadeOut 200ms ease forwards; }
 
 /* Animation Classes */
 .animate-fade-in {
-    animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: fadeIn 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .animate-slide-up {
-    animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: slideUp 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .animate-scale-in {
-    animation: scaleIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    animation: scaleIn 0.38s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Hint the browser for smoother animations */
+.animate-fade-in,
+.animate-slide-up,
+.animate-scale-in,
+.carousel-image {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
 }
 
 /* Responsive Utilities */
