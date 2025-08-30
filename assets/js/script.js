@@ -1072,6 +1072,7 @@ class TechHubApp {
             this.components.marqueeManager = new MarqueeManager();
             this.components.contactForm = new ContactForm();
             this.components.scrollAnimations = new ScrollAnimations();
+            this.components.counterAnimator = new CounterAnimator();
             this.components.performanceOptimizer = new PerformanceOptimizer();
             this.components.themeManager = new ThemeManager();
             
