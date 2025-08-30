@@ -215,15 +215,15 @@ class HeaderManager {
     
     handleMobileNavClick(e, link) {
         const href = link.getAttribute('href');
-        
+
         this.closeMobileMenu();
-        
-        // Add a small delay for smooth transition
+
+        // Navigate quickly after closing menu
         setTimeout(() => {
-            if (href !== window.location.pathname) {
+            if (href && href !== window.location.pathname) {
                 window.location.href = href;
             }
-        }, 300);
+        }, 80);
     }
 }
 
@@ -770,27 +770,76 @@ class ContactForm {
 }
 
 // ==============================================
+// NUMBER COUNTER ANIMATIONS
+// ==============================================
+
+class CounterAnimator {
+    constructor() {
+        this.counters = Array.from(document.querySelectorAll('.stat-value[data-count]'));
+        this.observer = null;
+        this.animated = new WeakSet();
+        if (this.counters.length) {
+            this.init();
+        }
+    }
+    init() {
+        if ('IntersectionObserver' in window) {
+            this.observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        this.animate(entry.target);
+                        this.observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+            this.counters.forEach(el => this.observer.observe(el));
+        } else {
+            // Fallback: animate immediately
+            this.counters.forEach(el => this.animate(el));
+        }
+    }
+    animate(el) {
+        if (this.animated.has(el)) return;
+        this.animated.add(el);
+        const target = parseFloat(el.getAttribute('data-count')) || 0;
+        const suffix = el.getAttribute('data-suffix') || '';
+        const duration = 1200;
+        const start = performance.now();
+        const startVal = 0;
+        const step = (now) => {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = Math.floor(startVal + (target - startVal) * eased);
+            el.textContent = `${current}${suffix}`;
+            if (progress < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+    }
+}
+
+// ==============================================
 // SCROLL ANIMATIONS
 // ==============================================
 
 class ScrollAnimations {
     constructor() {
         this.observerOptions = {
-            threshold: 0.1,
-            rootMargin: '50px 0px -50px 0px'
+            threshold: 0.06,
+            rootMargin: '120px 0px -60px 0px'
         };
         this.addDefaultAnimationClasses();
         this.animatedElements = document.querySelectorAll('.animate-fade-in, .animate-slide-up, .animate-scale-in');
         this.init();
+        this.applyStagger();
     }
 
     addDefaultAnimationClasses() {
         const mappings = [
-            ['.hero-text', 'animate-slide-up'],
+            ['.hero-text, .page-title, .page-description', 'animate-slide-up'],
             ['.hero-carousel', 'animate-scale-in'],
-            ['.section-header', 'animate-fade-in'],
-            ['.stat-card, .partner-card, .review-card, .faq-item, .course-card, .card', 'animate-slide-up'],
-            ['.help-section', 'animate-scale-in']
+            ['.section-header, header .container', 'animate-fade-in'],
+            ['.stat-card, .partner-card, .review-card, .faq-item, .course-card, .card, .footer-section, .contact-grid > *', 'animate-slide-up'],
+            ['.help-section, .newsletter, .location-header', 'animate-scale-in']
         ];
         mappings.forEach(([selector, cls]) => {
             document.querySelectorAll(selector).forEach(el => el.classList.add(cls));
@@ -846,6 +895,26 @@ class ScrollAnimations {
             this.animateElement(element);
         });
     }
+
+    applyStagger() {
+        const containers = [
+            '.cards-grid-2',
+            '.cards-grid-3',
+            '.stats-grid',
+            '.faq-grid',
+            '.courses-grid',
+            '.footer-content'
+        ];
+        containers.forEach(sel => {
+            document.querySelectorAll(sel).forEach(container => {
+                const children = Array.from(container.children);
+                children.forEach((child, i) => {
+                    child.style.willChange = 'transform, opacity';
+                    child.style.animationDelay = `${Math.min(i * 60, 360)}ms`;
+                });
+            });
+        });
+    }
 }
 
 // ==============================================
@@ -865,13 +934,16 @@ class PerformanceOptimizer {
     
     optimizeImages() {
         const images = document.querySelectorAll('img');
-        
+
         images.forEach(img => {
-            // Add loading attribute for native lazy loading
-            if (!img.hasAttribute('loading')) {
+            // Avoid lazy-loading above-the-fold or critical images
+            const inHero = !!img.closest('.hero, .page-header, header');
+            const rect = img.getBoundingClientRect();
+            const likelyAboveFold = rect.top < (window.innerHeight || 800);
+            if (!img.hasAttribute('loading') && !inHero && !likelyAboveFold) {
                 img.setAttribute('loading', 'lazy');
             }
-            
+
             // Add error handling
             img.addEventListener('error', () => {
                 img.src = 'assets/images/placeholder.svg';
@@ -1000,6 +1072,7 @@ class TechHubApp {
             this.components.marqueeManager = new MarqueeManager();
             this.components.contactForm = new ContactForm();
             this.components.scrollAnimations = new ScrollAnimations();
+            this.components.counterAnimator = new CounterAnimator();
             this.components.performanceOptimizer = new PerformanceOptimizer();
             this.components.themeManager = new ThemeManager();
             
@@ -1016,9 +1089,16 @@ class TechHubApp {
     }
     
     initializeLucideIcons() {
-        // Initialize Lucide icons if the library is loaded
-        if (typeof lucide !== 'undefined' && lucide.createIcons) {
-            lucide.createIcons();
+        // Initialize Lucide icons if the library is loaded, defer to idle time
+        const init = () => {
+            if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                lucide.createIcons();
+            }
+        };
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(init, { timeout: 800 });
+        } else {
+            setTimeout(init, 0);
         }
     }
     
@@ -1040,7 +1120,7 @@ class TechHubApp {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => {
                 this.handleResize();
-            }, 250);
+            }, 150);
         });
         
         // Handle back button navigation
@@ -1051,30 +1131,35 @@ class TechHubApp {
             }
         });
 
-        // Setup page transitions
+        // Setup page transitions (disabled to avoid flashes)
         this.setupPageTransitions();
+        // Enhance navigation with prefetch for faster switches
+        this.enhanceNavigation();
+    }
+
+    enhanceNavigation() {
+        // Prefetch internal .html links on hover/touchstart
+        const anchors = Array.from(document.querySelectorAll('a[href$=".html"]'));
+        const prefetched = new Set();
+        const prefetch = (url) => {
+            if (!url || prefetched.has(url)) return;
+            const link = document.createElement('link');
+            link.rel = 'prefetch';
+            link.href = url;
+            document.head.appendChild(link);
+            prefetched.add(url);
+        };
+        anchors.forEach(a => {
+            const href = a.getAttribute('href');
+            if (!href || href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+            a.addEventListener('mouseenter', () => prefetch(href));
+            a.addEventListener('touchstart', () => prefetch(href), { passive: true });
+        });
     }
 
     setupPageTransitions() {
-        // Fade-in on load
-        document.body.classList.add('page-enter');
-
-        // Intercept internal link clicks for fade-out
-        const anchors = Array.from(document.querySelectorAll('a[href]'));
-        anchors.forEach(a => {
-            const href = a.getAttribute('href');
-            const target = a.getAttribute('target');
-            if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || target === '_blank') return;
-            const isInternal = href.endsWith('.html') || href.endsWith('.php') || href.startsWith('/') || (!href.startsWith('http'));
-            if (!isInternal) return;
-            a.addEventListener('click', (e) => {
-                // Allow modified clicks (cmd/ctrl)
-                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-                e.preventDefault();
-                document.body.classList.add('page-leave');
-                setTimeout(() => { window.location.href = href; }, 180);
-            });
-        });
+        // Disable page-level fades to prevent blank flashes between pages
+        // Per-section animations remain via IntersectionObserver
     }
     
     pauseAnimations() {

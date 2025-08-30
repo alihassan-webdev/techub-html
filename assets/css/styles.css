@@ -31,7 +31,7 @@
     --color-secondary: #B22429;
     --color-green: #16a34a;
     --color-blue: var(--color-primary);
-    --color-red: #dc2626;
+    --color-red: var(--color-secondary);
     
     /* Background and Surface Colors */
     --color-background: #ffffff;
@@ -562,7 +562,7 @@ a:hover {
 }
 
 .btn-primary:hover {
-    background-color: var(--color-primary-light);
+    background-color: #021d40;
     transform: translateY(-2px);
     box-shadow: var(--shadow-primary);
     color: white;
@@ -590,7 +590,7 @@ a:hover {
 }
 
 .btn-secondary:hover {
-    background-color: #dc2626;
+    background-color: #8d1b20;
     transform: translateY(-2px);
     box-shadow: 0 10px 25px -5px rgba(178, 36, 41, 0.25);
     color: white;
@@ -659,6 +659,7 @@ a:hover {
 }
 
 /* Section Styles */
+section { padding: var(--space-10) 0; }
 .section-header {
     text-align: center;
     margin-bottom: var(--space-12);
@@ -768,6 +769,7 @@ a:hover {
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--space-8);
+    margin-top: var(--space-6);
 }
 
 @media (min-width: 768px) {
@@ -780,6 +782,7 @@ a:hover {
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--space-6);
+    margin-top: var(--space-6);
 }
 
 @media (min-width: 768px) {
@@ -796,15 +799,17 @@ a:hover {
 
 /* Hero Section */
 .hero {
-    min-height: 100vh;
+    min-height: 90vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--space-6) 0 var(--space-12);
+    padding: var(--space-4) 0 var(--space-10);
     background-color: var(--color-white);
     position: relative;
     overflow: hidden;
 }
+/* Let hero and footer keep their own spacing */
+.hero, .footer { padding-top: initial; padding-bottom: initial; }
 
 .hero-content {
     display: grid;
@@ -864,7 +869,7 @@ a:hover {
 
 .hero-description {
     font-size: 1rem;
-    line-height: 1.7;
+    line-height: 1.5;
     color: var(--color-text-secondary);
     margin-bottom: var(--space-4);
     padding: 0 var(--space-2);
@@ -901,6 +906,7 @@ a:hover {
     .hero-buttons {
         flex-direction: row;
         gap: var(--space-4);
+        justify-content: center;
     }
 }
 
@@ -913,6 +919,8 @@ a:hover {
 .hero-buttons .btn-primary,
 .hero-buttons .btn-secondary {
     width: 100%;
+    justify-content: center;
+    text-align: center;
 }
 
 @media (min-width: 640px) {
@@ -926,7 +934,8 @@ a:hover {
 .hero-carousel {
     display: flex;
     justify-content: center;
-    order: -1;
+    order: 2;
+    margin-top: var(--space-6);
 }
 
 @media (min-width: 1024px) {
@@ -1342,7 +1351,7 @@ a:hover {
 }
 
 .faq-category {
-    display: inline-block;
+    display: none;
     background-color: rgba(3, 47, 101, 0.1);
     color: var(--color-primary);
     font-size: 0.75rem;
@@ -1386,13 +1395,14 @@ a:hover {
 
 .faq-item.open .faq-content {
     max-height: 20rem;
-    padding: 0 var(--space-6) var(--space-6);
+    padding: 0 var(--space-6) var(--space-4);
 }
 
 .faq-content p {
     color: var(--color-text-secondary);
-    line-height: 1.6;
-    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: var(--space-2) 0 0 0;
 }
 
 .help-section {
@@ -1495,7 +1505,7 @@ a:hover {
 }
 
 .footer-links a:hover {
-    color: var(--color-primary-light);
+    color: var(--color-white);
 }
 
 .footer-links a svg {
@@ -1639,7 +1649,7 @@ a:hover {
 }
 
 .credits a:hover {
-    color: var(--color-primary-light);
+    color: var(--color-white);
 }
 
 /* Course Styles */
@@ -1672,6 +1682,9 @@ a:hover {
     overflow: hidden;
     box-shadow: var(--shadow-md);
     transition: all var(--transition-normal);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .course-card:hover {
@@ -1728,7 +1741,10 @@ a:hover {
 }
 
 .course-content {
-    padding: var(--space-6);
+    padding: var(--space-6) var(--space-6) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .course-title {
@@ -1760,11 +1776,11 @@ a:hover {
 .course-description {
     color: var(--color-text-secondary);
     line-height: 1.6;
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-3);
 }
 
 .course-features {
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-4);
 }
 
 .feature-item,
@@ -1800,10 +1816,11 @@ a:hover {
     cursor: pointer;
     transition: all var(--transition-fast);
     text-decoration: none;
+    margin-top: auto;
 }
 
 .course-btn:hover {
-    background-color: var(--color-primary-light);
+    background-color: #021d40;
     transform: translateY(-2px);
     box-shadow: var(--shadow-primary);
     color: white;
@@ -1814,7 +1831,7 @@ a:hover {
 }
 
 .course-btn.premium:hover {
-    background-color: #dc2626;
+    background-color: #8d1b20;
 }
 
 /* Contact Styles */
@@ -2370,25 +2387,39 @@ a:hover {
 /* Page transition animations */
 @keyframes pageFadeIn { from { opacity: 0 } to { opacity: 1 } }
 @keyframes pageFadeOut { from { opacity: 1 } to { opacity: 0 } }
-body.page-enter { animation: pageFadeIn 320ms ease forwards; }
-body.page-leave { animation: pageFadeOut 200ms ease forwards; }
+body.page-enter { animation: pageFadeIn 260ms ease-out forwards; }
+body.page-leave { animation: pageFadeOut 140ms ease-out forwards; }
 
 @keyframes scaleIn {
     from { opacity: 0; transform: scale(0.95); }
     to { opacity: 1; transform: scale(1); }
 }
 
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
 /* Animation Classes */
 .animate-fade-in {
-    animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: fadeIn 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .animate-slide-up {
-    animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: slideUp 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .animate-scale-in {
-    animation: scaleIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    animation: scaleIn 0.38s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Hint the browser for smoother animations */
+.animate-fade-in,
+.animate-slide-up,
+.animate-scale-in,
+.carousel-image {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
 }
 
 /* Responsive Utilities */
